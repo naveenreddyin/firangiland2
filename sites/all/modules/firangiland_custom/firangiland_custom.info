@@ -1,0 +1,6 @@
+name = Firangiland Custom
+description = Custom modules for Firangiland
+package = Other
+core = 7.x
+
+stylesheets[all][] = css/firangiland_custom.css
