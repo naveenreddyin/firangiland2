@@ -161,8 +161,9 @@ function bartik_preprocess_page(&$variables){
   // dpm($variables);
   drupal_add_css(drupal_get_path('module', 'fivestar') . '/css/fivestar.css');
 
-  if($variables['node']->type == 'restaurant'){
+  if(isset($variables['node']) && $variables['node']->type == 'restaurant'){
 
     $variables['title'] = false;
+    $variables['links'] = false;
   }
 }

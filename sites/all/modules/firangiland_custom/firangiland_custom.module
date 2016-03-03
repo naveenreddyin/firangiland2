@@ -1,1 +1,33 @@
 <?php
+/**
+ * Implements hook_form_alter().
+ *
+ * Hide average fivestar field from review edit/create form.
+ */
+function firangiland_custom_form_alter(&$form, &$form_state, $form_id) {
+
+  if ($form_id == 'review_for_restaurant_node_form') {
+    // Hide average field, this field is calculated upon node_presave.
+    $form['field_overall_average']['#access'] = FALSE;
+  }
+}
+
+
+/**
+ * Implements hook_node_presave().
+ *
+ * Calculates average vote rating.
+ */
+function firangiland_custom_node_presave($node) {
+  if ($node->type == 'review_for_restaurant') {
+    // Get values from 3 axis.
+    $vote_food     = entity_metadata_wrapper('node', $node)->field_food->value();
+    $vote_ambience      = entity_metadata_wrapper('node', $node)->field_ambience->value();
+
+    // Calculate and set average axe.
+    $votes_average      = ($vote_food + $vote_ambience) / 2;
+    // @info: Can't use entity_metadata_wrapper, because '->set' not supported on this field.
+    //entity_metadata_wrapper('node', $node)->field_overall_average->set($votes_average);
+    $node->field_overall_average['und'][0]['rating'] = $votes_average;  
+  }
+}
