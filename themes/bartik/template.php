@@ -160,6 +160,7 @@ function bartik_preprocess_page(&$variables){
 
   // dpm($variables);
   drupal_add_css(drupal_get_path('module', 'fivestar') . '/css/fivestar.css');
+  drupal_add_css(drupal_get_path('module', 'fivestar') . '/widgets/oxygen/oxygen.css');
 
   if(isset($variables['node']) && $variables['node']->type == 'restaurant'){
 
@@ -167,3 +168,5 @@ function bartik_preprocess_page(&$variables){
     $variables['links'] = false;
   }
 }
+
+

@@ -23,8 +23,14 @@ $current_rating = votingapi_select_results(
       
       
       dpm($content);
-    
-   print theme('fivestar_static', array('rating' => $current_rating[0]['value'], 'stars' => 5, 'tag' => 'food'));
+    $variables = array(
+        "rating" => $current_rating[0]['value'],
+        "average_rating" => $current_rating[0]['value'],
+        "votes"  => 2,
+        "stars" => 5
+    );
+    $variables["widget"]["name"] = "basic";
+   print theme('fivestar_static', array('rating' => $current_rating[0]['value'], 'stars' => 5, 'tag' => 'food', 'widget'=>array('name'=>'oxygen', 'css'=>'oxygen'))).theme('fivestar_summary', $variables);
 
 //    $settings = array(
 //     'stars' => 5,
