@@ -215,3 +215,4 @@ $output = '<span class="empty">'. t('No votes yet') .'</span>';
 $output = ' <div itemscope itemtype="http://data-vocabulary.org/Review-aggregate"><div class="fivestar-summary fivestar-summary-'. $div_class . '">'. $output .'</div></div>';
 return $output;
 }
+

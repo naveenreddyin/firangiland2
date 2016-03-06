@@ -39,4 +39,5 @@ print theme('fivestar_static', array('rating' => $current_rating[0]['value'], 's
 
 print render($content['field_location']);
 
+		
 ?>
