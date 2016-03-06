@@ -19,6 +19,7 @@ function firangiland_custom_form_alter(&$form, &$form_state, $form_id) {
  * Calculates average vote rating.
  */
 function firangiland_custom_node_presave($node) {
+
   if ($node->type == 'review_for_restaurant') {
     // Get values from 3 axis.
     $vote_food     = entity_metadata_wrapper('node', $node)->field_food->value();
@@ -29,5 +30,8 @@ function firangiland_custom_node_presave($node) {
     // @info: Can't use entity_metadata_wrapper, because '->set' not supported on this field.
     //entity_metadata_wrapper('node', $node)->field_overall_average->set($votes_average);
     $node->field_overall_average['und'][0]['rating'] = $votes_average;  
+
+    
   }
 }
+
