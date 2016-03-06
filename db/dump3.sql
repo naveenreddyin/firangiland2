@@ -19,11 +19,6 @@
 -- Current Database: `firangiland`
 --
 
-CREATE DATABASE /*!32312 IF NOT EXISTS*/ `firangiland` /*!40100 DEFAULT CHARACTER SET latin1 */;
-
-USE `firangiland`;
-
---
 -- Table structure for table `actions`
 --
 
