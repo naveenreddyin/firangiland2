@@ -11,6 +11,13 @@ function firangiland_custom_form_alter(&$form, &$form_state, $form_id) {
     $form['field_overall_average']['#access'] = FALSE;
   }
 
+  if ($form['#id'] == 'views-exposed-form-frontpage-page') {
+    // Your magic code goes here...
+    dpm($form);
+    $form['field_address_country']['#prefix'] = '<span class="sdfsd">';
+    $form['field_address_country']['#prefix'] = '</span>';
+  }
+
 
 }
 
@@ -36,4 +43,6 @@ function firangiland_custom_node_presave($node) {
     
   }
 }
+
+
 
