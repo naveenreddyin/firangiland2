@@ -10,6 +10,8 @@ function firangiland_custom_form_alter(&$form, &$form_state, $form_id) {
     // Hide average field, this field is calculated upon node_presave.
     $form['field_overall_average']['#access'] = FALSE;
   }
+
+
 }
 
 

@@ -1,5 +1,6 @@
 <?php
 dpm($content);
+print render($content['field_tet']);
 print render($content['rate_thumbs_up_down']);
 if($title){
 
