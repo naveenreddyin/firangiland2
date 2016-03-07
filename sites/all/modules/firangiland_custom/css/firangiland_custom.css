@@ -4,3 +4,21 @@
 	padding: 20px;
 	margin-bottom: 20px;
 }
+
+
+#edit-field-address-country{
+
+	width: 170px;
+}
+
+#edit-field-address-country option{
+	width: 140px;
+}
+
+#edit-field-address-locality{
+	width: 160px;
+}
+
+#edit-field-address-postal-code{
+	width: 160px;
+}
