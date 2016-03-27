@@ -1,4 +1,40 @@
 <?php
+
+/**
+ * Implements hook_init()
+ * Use it for following in this module:
+ * 1. To insert taxonomy for food menu
+ */
+
+function firangiland_custom_init(){
+
+  // $row = 1;
+  // if (($handle = fopen(drupal_get_path('module', 'firangiland_custom') . "/includes/food_menu.csv", "r")) !== FALSE) {
+
+  //     while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+  //         $num = count($data);
+  //         $row++;
+  //           for ($c=0; $c < $num; $c++) {
+  //               // echo $data[$c] . "<br />\n";
+
+  //               taxonomy_term_save((object) array(
+  //                 'name' =>  $data[$c],
+  //                 'vid' => '3',
+  //               ));
+  //             }
+  //         }
+  //     fclose($handle);
+  // }
+  // below code is to delete all the terms 
+  // $vocabulary = taxonomy_vocabulary_machine_name_load('main_menu');
+  //   foreach (taxonomy_get_tree($vocabulary->vid) as $term) {
+  //     taxonomy_term_delete($term->tid);
+  //   }
+
+}
+
+
+
 /**
  * Implements hook_form_alter().
  *
