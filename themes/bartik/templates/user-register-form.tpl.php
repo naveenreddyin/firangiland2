@@ -1,4 +1,7 @@
+<?php
 
+if (request_path() == 'user/register'):
+?>
 
 <div class="fb_user-login-button-wrapper">
 
@@ -9,6 +12,11 @@
 
 
 <h1>Or</h1> <br/>
+
+<?php
+endif; 
+?>
+
 
 <div class="bartik-user-login-form-wrapper">
 

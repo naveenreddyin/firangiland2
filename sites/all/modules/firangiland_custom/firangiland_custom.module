@@ -74,4 +74,12 @@ function firangiland_custom_node_presave($node) {
 }
 
 
+/**
+ * implements hook_menu_alter()
+ */
+function firangiland_custom_menu_alter(&$items) {
+  // $items['user']['type'] = MENU_CALLBACK;
+  $items['user/simple-fb-connect']['type'] = MENU_CALLBACK;
+  // $items['user/password']['type'] = MENU_CALLBACK;
+}
 

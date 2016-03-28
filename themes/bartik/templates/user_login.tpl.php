@@ -1,3 +1,7 @@
+<?php
+
+if (request_path() == 'user/login' || request_path() == 'user'):
+?>
 
 <div class="fb_user-login-button-wrapper">
 
@@ -7,10 +11,17 @@
 </div>
 
 
+
+
 <h1>Or</h1> <br/>
+
+<?php
+endif; 
+?>
 
 <div class="bartik-user-login-form-wrapper">
 
 	<?php print drupal_render_children($form); ?>
 
 </div>
+
