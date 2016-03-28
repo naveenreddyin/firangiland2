@@ -216,3 +216,39 @@ $output = ' <div itemscope itemtype="http://data-vocabulary.org/Review-aggregate
 return $output;
 }
 
+
+function bartik_theme(){
+
+  $items = array();
+
+  $items['user_register_form'] = array(
+    'render element' => 'form',
+    'path' => drupal_get_path('theme', 'bartik') . '/templates',
+    'template' => 'user-register-form',
+    'preprocess functions' => array(
+      'bartik_preprocess_user_register_form'
+      ),
+    );
+
+  $items['user_login'] = array(
+    'render element' => 'form',
+    'path' => drupal_get_path('theme', 'bartik') . '/templates',
+    'template' => 'user_login',
+    'preprocess functions' => array(
+      'bartik_preprocess_user_login'
+      ),
+    );
+
+  return $items;
+}
+
+
+function bartik_preprocess_user_register_form(&$vars){
+  $vars['intro_text'] = t('Register yourself here.');
+}
+
+function bartik_preprocess_user_login(&$vars) {
+
+  $vars['intro_text'] = t('Login please');
+
+}
