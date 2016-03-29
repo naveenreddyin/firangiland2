@@ -57,7 +57,10 @@ function firangiland_custom_form_alter(&$form, &$form_state, $form_id) {
  * Calculates average vote rating.
  */
 function firangiland_custom_node_presave($node) {
-
+// global $user;
+// dsm($user);
+// so we can get $user->uid;
+// dpm($node->nid);
   if ($node->type == 'review_for_restaurant') {
     // Get values from 3 axis.
     $vote_food     = entity_metadata_wrapper('node', $node)->field_food->value();
@@ -69,7 +72,26 @@ function firangiland_custom_node_presave($node) {
     //entity_metadata_wrapper('node', $node)->field_overall_average->set($votes_average);
     $node->field_overall_average['und'][0]['rating'] = $votes_average;  
 
-    
+    // $params = array(
+    //     'firangiland_custom_user_votes_status_uid' => $node->uid,
+    //     'firangiland_custom_user_votes_status_review_nid' => entity_metadata_wrapper('node', $node)->nid,
+    //   );
+    // drupal_write_record('firangiland_custom_user_votes_status', $params);
+
+  }
+}
+
+function firangiland_custom_node_insert($node){
+
+  dpm($node);
+  if ($node->type == 'review_for_restaurant') {
+    $params = array(
+        'firangiland_custom_user_votes_status_uid' => $node->uid,
+        'firangiland_custom_user_votes_status_review_nid' => $node->nid,
+        'firangiland_custom_user_votes_status_restaurant_nid' => $node->field_restaurant_rating['und'][0]['nid'],
+        'firangiland_custom_user_votes_status_date' => REQUEST_TIME,
+      );
+    drupal_write_record('firangiland_custom_user_votes_status', $params);
   }
 }
 
@@ -81,5 +103,36 @@ function firangiland_custom_menu_alter(&$items) {
   // $items['user']['type'] = MENU_CALLBACK;
   $items['user/simple-fb-connect']['type'] = MENU_CALLBACK;
   // $items['user/password']['type'] = MENU_CALLBACK;
+}
+
+/**
+ * Implements custom function to check if the user has already reviewed the node or not.
+ */
+
+function firangiland_custom_check_if_user_has_reviewed(){
+  global $user;
+
+  // dpm($user);
+  if ($node = menu_get_object()) {
+  // Get the nid
+  $nid = $node->nid;
+  }
+
+  if(!user_is_logged_in())
+    return FALSE;
+
+  $query = db_select('firangiland_custom_user_votes_status', 'cr')
+  ->fields('cr')
+  ->condition('firangiland_custom_user_votes_status_uid', $user->uid, '=')
+  ->condition('firangiland_custom_user_votes_status_restaurant_nid', $nid, '=')
+  ->execute()
+  ->fetchAssoc();
+  
+  dpm($query);
+
+  if($query)
+    return $query;
+  else
+    return FALSE;
 }
 

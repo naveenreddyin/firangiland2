@@ -1,0 +1,70 @@
+<?php
+
+/**
+ * implements hook_schema()
+ *
+ */
+
+ function firangiland_custom_schema(){
+	$schema['firangiland_custom_user_votes_status'] = array(
+  'description' => 'To track user votes on particular restaurant.',
+  'fields' => array(
+    'firangiland_custom_user_votes_status_id' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'serial',
+      'not null' => TRUE,
+    ),
+    'firangiland_custom_user_votes_status_uid' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'int',
+      'not null' => FALSE,
+    ),
+    'firangiland_custom_user_votes_status_restaurant_node' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'varchar',
+      'length' => '45',
+      'not null' => FALSE,
+    ),
+    'firangiland_custom_user_votes_status_restaurant_nid' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'varchar',
+      'length' => '45',
+      'not null' => FALSE,
+    ),
+    'firangiland_custom_user_votes_status_review_node' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'varchar',
+      'length' => '45',
+      'not null' => FALSE,
+    ),
+    'firangiland_custom_user_votes_status_review_nid' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'varchar',
+      'length' => '45',
+      'not null' => FALSE,
+    ),
+    'firangiland_custom_user_votes_status_date' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'int',
+      'not null' => FALSE,
+    ),
+  ),
+  'foreign keys' => array(
+      'uid' => array(
+        'table' => 'users',
+        'columns' => array('firangiland_custom_user_votes_status_uid' => 'uid'),
+      ),
+      'node' => array(
+        'table' => 'node',
+        'columns' => array('firangiland_custom_user_votes_status_review_nid' => 'nid'),
+      ),
+    ),
+  'primary key' => array('firangiland_custom_user_votes_status_id'),
+);
+
+
+	return $schema;
+ }
+
+
+ 
