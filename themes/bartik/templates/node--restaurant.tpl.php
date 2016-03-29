@@ -10,6 +10,8 @@ if($title){
 
 }
 
+// dpm(variable_get('site_mail', ''));
+
 if(firangiland_custom_check_if_user_has_reviewed()){
 	$query = firangiland_custom_check_if_user_has_reviewed();
 	$nid = $query['firangiland_custom_user_votes_status_review_nid'];

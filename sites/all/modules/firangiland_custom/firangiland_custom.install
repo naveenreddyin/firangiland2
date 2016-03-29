@@ -62,6 +62,43 @@
   'primary key' => array('firangiland_custom_user_votes_status_id'),
 );
 
+$schema['fc_others_menu'] = array(
+  'description' => 'TODO: please describe this table!',
+  'fields' => array(
+    'fc_others_menu_id' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'serial',
+      'unsigned' => TRUE,
+      'not null' => TRUE,
+    ),
+    'fc_others_menu_data' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'varchar',
+      'length' => '45',
+      'not null' => FALSE,
+    ),
+    'fc_others_menu_nid' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'int',
+      'unsigned' => TRUE,
+      'not null' => FALSE,
+    ),
+  ),
+  'primary key' => array('fc_others_menu_id'),
+  'indexes' => array(
+    'fc_others_menu_node_idx' => array('fc_others_menu_nid'),
+    'node_idx' => array('fc_others_menu_nid'),
+  ),
+  'foreign keys' => array(
+      'node_rx' => array(
+        'table' => 'node',
+        'columns' => array('fc_others_menu_nid' => 'nid'),
+      ),
+    ),
+);
+
+
+
 
 	return $schema;
  }
