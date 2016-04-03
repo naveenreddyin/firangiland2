@@ -1,5 +1,5 @@
 <?php
-dpm($content);
+// dpm($content);
 // print render($content['field_tet']);
 // print render($content['rate_thumbs_up_down']);
 if($title){
@@ -24,7 +24,7 @@ print render($content['links']);
 }
 
 // print render($content['links']);
-// print "<a href=".base_path()."node/add/review-for-restaurant>click</a>";
+// print "<a href=".base_path()."node/add/review-for-restaurant/".get_defined_vars()['nid'].">click</a>";
 
 $criteria_for_count = array(
 		'entity_id' => $node->nid,

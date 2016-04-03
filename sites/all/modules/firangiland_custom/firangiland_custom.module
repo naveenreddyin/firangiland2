@@ -6,6 +6,7 @@
  * 1. To insert taxonomy for food menu
  */
 
+
 function firangiland_custom_init(){
 
   // $row = 1;
@@ -30,6 +31,79 @@ function firangiland_custom_init(){
   //   foreach (taxonomy_get_tree($vocabulary->vid) as $term) {
   //     taxonomy_term_delete($term->tid);
   //   }
+  // golden code
+  // $node = new stdClass();
+  // $node->title = "YOUR TITLE";
+  // $node->type = "review_for_restaurant";
+  // node_object_prepare($node); // Sets some defaults. Invokes hook_prepare() and hook_node_prepare().
+  // $node->language = LANGUAGE_NONE; // Or e.g. 'en' if locale is enabled
+  // $node->status = 1; //(1 or 0): published or not
+  // $node->promote = 0; //(1 or 0): promoted to front page
+  // $node->comment = 1; // 0 = comments disabled, 1 = read only, 2 = read/write
+
+  // // Term reference (taxonomy) field
+  // $node->field_food[$node->language][0]['rating'] = 100;
+  // $node->field_ambience[$node->language][0]['rating'] = 100;
+
+
+  // // Entity reference field
+  // $node->field_restaurant_rating[$node->language][0] = array(
+  //   'nid' => 17,
+  //   'target_id' => 17,
+  //   'target_type' => 'node',
+  // );
+  // // 'node' is default,
+  // // Other possible values are "user" and  "taxonomy_term" 
+
+  // $node = node_submit($node); // Prepare node for saving
+  // node_save($node);
+
+//   $values = array(
+//   'type' => 'review_for_restaurant',
+//   'status' => 1,
+//   'comment' => 1,
+//   'promote' => 0,
+// );
+// $entity = entity_create('node', $values);
+
+// // The entity is now created, but we have not yet simplified use of it.
+// // Now create an entity_metadata_wrapper around the new node entity
+// // to make getting and setting values easier
+// $ewrapper = entity_metadata_wrapper('node', $entity);
+// // Using the wrapper, we do not have to worry about telling Drupal
+// // what language we are using. The Entity API handles that for us.
+// $ewrapper->title->set('YOUR TITLE');
+
+// // Setting the body is a bit different from other properties or fields
+// // because the body can have both its complete value and its
+// // summary
+// $my_body_content = 'A bunch of text about things that interest me';
+// $ewrapper->body->set(array('value' => $my_body_content));
+
+
+// $ewrapper->field_ambience->set(30);
+// $ewrapper->field_food->set(50);
+// // Setting the value of an entity reference field only requires passing
+// // the entity id (e.g., nid) of the entity to which you want to refer
+// // The nid 15 here is just an example.
+// $ref_nid = 17;
+// // Note that the entity id (e.g., nid) must be passed as an integer not a
+// // string
+// $ewrapper->field_restaurant_rating->set(intval($ref_nid));
+// // Entity API cannot set date field values so the 'old' method must
+// // be used
+// $my_date = new DateTime('January 1, 2013');
+// $entity->field_my_date[LANGUAGE_NONE][0] = array(
+//    'value' => date_format($my_date, 'Y-m-d'),
+//    'timezone' => 'UTC',
+//    'timezone_db' => 'UTC',
+//  );
+
+// // Now just save the wrapper and the entity
+// // There is some suggestion that the 'true' argument is necessary to
+// // the entity save method to circumvent a bug in Entity API. If there is
+// // such a bug, it almost certainly will get fixed, so make sure to check.
+// $ewrapper->save();
 
 }
 
@@ -47,6 +121,11 @@ function firangiland_custom_form_alter(&$form, &$form_state, $form_id) {
     $form['field_overall_average']['#access'] = FALSE;
   }
 
+
+  if ($form_id == 'user_login') {
+    
+    $form['#submit'][] = 'firangiland_custom_user_login_submit';
+  }
 
 }
 
@@ -68,6 +147,7 @@ function firangiland_custom_node_presave($node) {
 
     // Calculate and set average axe.
     $votes_average      = ($vote_food + $vote_ambience) / 2;
+
     // @info: Can't use entity_metadata_wrapper, because '->set' not supported on this field.
     //entity_metadata_wrapper('node', $node)->field_overall_average->set($votes_average);
     $node->field_overall_average['und'][0]['rating'] = $votes_average;  
@@ -173,20 +253,33 @@ function firangiland_custom_menu_alter(&$items) {
   // $items['user']['type'] = MENU_CALLBACK;
   $items['user/simple-fb-connect']['type'] = MENU_CALLBACK;
   // $items['user/password']['type'] = MENU_CALLBACK;
+  // dpm($items);
+  
 }
+
+
+
 
 /**
  * Implements custom function to check if the user has already reviewed the node or not.
  */
 
-function firangiland_custom_check_if_user_has_reviewed(){
+function firangiland_custom_check_if_user_has_reviewed($ref_id = NULL){
   global $user;
 
   // dpm($user);
-  if ($node = menu_get_object()) {
-  // Get the nid
-  $nid = $node->nid;
+  if(isset($ref_id) && !empty($ref_id)){
+
+    $nid = $ref_id;
+
+  }else{
+
+    if ($node = menu_get_object()) {
+        // Get the nid
+        $nid = $node->nid;
+    }
   }
+  
 
   if(!user_is_logged_in())
     return FALSE;
@@ -205,4 +298,136 @@ function firangiland_custom_check_if_user_has_reviewed(){
   else
     return FALSE;
 }
+
+
+// /**
+//  * Implements hook_form_alter().
+//  */
+// function firangiland_custom_form_alter(&$form, &$form_state, $form_id) {
+  
+// }
+/**
+ * Additional handler for user_login form submit.
+ */
+function firangiland_custom_user_login_submit($form, &$form_state) {
+
+  if(isset($_GET['review_by_anonymous'])){
+
+    $destination_arr = explode('/', $_GET['destination']);
+    unset($_GET['destination']);
+    $anid_id = $destination_arr[1];
+    $node = node_load($anid_id);
+    $ref_id = $node->field_anonymous_rating_reference['und'][0]['nid'];
+
+    if(!firangiland_custom_check_if_user_has_reviewed($ref_id)){
+
+        $review_node = new stdClass();
+
+        $review_node->type = 'review_for_restaurant';
+        $review_node->language = $node->language;
+        $review_node->title = $node->title;
+
+        node_object_prepare($review_node);
+        $review_node->comment = 0;
+
+        $body_text = $node->body[LANGUAGE_NONE][0]['value'];
+        $review_node->body[LANGUAGE_NONE][0]['value'] = $body_text;
+        $review_node->body[LANGUAGE_NONE][0]['summary'] = text_summary($body_text);
+        $review_node->body[LANGUAGE_NONE][0]['format']  = filter_default_format();
+
+        $review_node->uid = $form_state['uid'];
+        $review_node->status = 1;
+        // $wrapper = entity_metadata_wrapper('node', $node);
+        $food_value = $node->field_anonymous_food_rating['und'][0]['rating'];
+        $ambience_value = $node->field_anonymous_ambience['und'][0]['rating'];
+        $review_node->field_food['und'][0]['rating'] = $food_value;
+        $review_node->field_ambience['und'][0]['rating'] = $ambience_value;
+        
+        dpm($ref_id);
+        $review_node->field_restaurant_rating['und'][0] = array(
+          'nid' => intval($ref_id),
+          'target_id' => intval($ref_id),
+          'target_type' => 'node',
+        );
+        dpm($node);
+        dpm($review_node);
+        $review_node = node_submit($review_node);
+        node_save($review_node);
+
+        node_delete($node->nid);
+
+        $alias = drupal_get_path_alias('node/'.$review_node->nid);
+
+        $form_state['redirect'] =  $alias;
+
+        drupal_set_message(t('Your review has now been published. Thank you.'), 'status', FALSE);
+    }else{
+
+        $query = firangiland_custom_check_if_user_has_reviewed($ref_id);
+        $nid = $query['firangiland_custom_user_votes_status_review_nid'];
+
+        $alias = drupal_get_path_alias('node/'.$nid);
+
+        $form_state['redirect'] =  $alias;
+
+        drupal_set_message(t('You seems to have already reviewed the restaurant. Here is that review, please update it if you want.'), 'status', FALSE);
+    }
+    
+
+  }
+
+  
+}
+
+// function firangiland_custom_form_user_login_form_alter(&$form, &$form_state) {
+
+//   dpm($form);
+//   dpm($form_state);
+
+//   $form['#submit'][] = 'firangiland_custom_form_user_register_submit';
+
+// }
+
+
+// function firangiland_custom_form_user_register_submit(&$form, &$form_state) {
+
+
+// drupal_set_message(t('A welcome message with further instructions has been sent to your e-mail address.'));
+// }
+
+
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+// function firangiland_custom_form_anonymous_review_of_restaurant_node_form_alter(&$form, &$form_state, $form_id) {
+
+//   dpm($form);
+//   dsm($form_id);
+//   dsm($form_state);
+//     $form['actions']['submit']['#submit'][] = 'firangiland_custom_anonymous_review_of_restaurant_node_form_submit';
+
+
+//   }
+
+// function firangiland_custom_anonymous_review_of_restaurant_node_form_submit($form, &$form_state){
+ 
+//   // $form_state['rebuild'] = TRUE;
+//   $form_state['redirect'] = "user/register";
+// dsm($form_state);
+//  drupal_set_message(token_replace(t('Please login or register to post the review. Your review wont be submitted unless you verify your email in case you register a new account.'), array('node' => $form_state['node'])));
+
+
+// }
+
+
+// function firangiland_custom_field_widget_form_alter(&$element, &$form_state, $context){
+
+//   dpm($element);
+//   dpm($form_state);
+
+//   $element['node_link']['destination']['#access'] = FALSE;
+//   $element['node_link']['destination']['#type'] = 'hidden';
+
+// }
 

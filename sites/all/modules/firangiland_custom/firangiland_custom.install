@@ -97,6 +97,39 @@ $schema['fc_others_menu'] = array(
     ),
 );
 
+$schema['fc_anonymous_publisher_info'] = array(
+  'description' => 'TODO: please describe this table!',
+  'fields' => array(
+    'id' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'serial',
+      'unsigned' => TRUE,
+      'not null' => TRUE,
+    ),
+    'uid' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'int',
+      'unsigned' => TRUE,
+      'not null' => FALSE,
+    ),
+    'destination' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'varchar',
+      'length' => '255',
+      'not null' => FALSE,
+    ),
+  ),
+  'primary key' => array('id'),
+  'indexes' => array(
+    'fc_destination_uid_idx' => array('uid'),
+  ),
+  'foreign keys' => array(
+      'uid' => array(
+        'table' => 'users',
+        'columns' => array('uid' => 'uid'),
+      ),
+    ),
+);
 
 
 

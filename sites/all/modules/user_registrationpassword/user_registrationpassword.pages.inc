@@ -10,7 +10,7 @@
  *
  * @see user_pass_rehash()
  */
-function user_registrationpassword_confirm_account($form, &$form_state, $uid, $timestamp, $hashed_pass) {
+function user_registrationpassword_confirm_account($form, &$form_state, $uid, $timestamp, $hashed_pass, $review_id = NULL) {
   global $user;
 
   // When processing the one-time login link, we have to
@@ -63,6 +63,43 @@ function user_registrationpassword_confirm_account($form, &$form_state, $uid, $t
         );
         // Set the new user.
         $user = $account;
+
+        if (isset($review_id) && !empty($review_id)){
+          $node = node_load($review_id);
+          // $node->type = 'review_for_restaurant';
+          $review_node = new stdClass();
+          $review_node->type = 'review_for_restaurant';
+          $review_node->language = $node->language;
+          $review_node->title = $node->title;
+          node_object_prepare($review_node);
+          $review_node->comment = 0;
+
+          $body_text = $node->body[LANGUAGE_NONE][0]['value'];
+          $review_node->body[LANGUAGE_NONE][0]['value'] = $body_text;
+          $review_node->body[LANGUAGE_NONE][0]['summary'] = text_summary($body_text);
+          $review_node->body[LANGUAGE_NONE][0]['format']  = filter_default_format();
+
+          $review_node->uid = $user->uid;
+          $review_node->status = 1;
+          // $wrapper = entity_metadata_wrapper('node', $node);
+          $food_value = $node->field_anonymous_food_rating['und'][0]['rating'];
+          $ambience_value = $node->field_anonymous_ambience['und'][0]['rating'];
+          $review_node->field_food['und'][0]['rating'] = $food_value;
+          $review_node->field_ambience['und'][0]['rating'] = $ambience_value;
+          $ref_id = $node->field_anonymous_rating_reference['und'][0]['nid'];
+          dpm($ref_id);
+          $review_node->field_restaurant_rating['und'][0] = array(
+            'nid' => intval($ref_id),
+            'target_id' => intval($ref_id),
+            'target_type' => 'node',
+          );
+          dpm($node);
+          dpm($review_node);
+          $review_node = node_submit($review_node);
+          node_save($review_node);
+
+          node_delete($node->nid);
+        }
         // user_login_finalize() also updates the login timestamp of the
         // user, which invalidates further use of the one-time login link.
         user_login_finalize();

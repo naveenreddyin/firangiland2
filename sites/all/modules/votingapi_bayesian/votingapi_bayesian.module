@@ -7,28 +7,30 @@ include 'votingapi_bayesian.functions.inc';
  * Implements hook_votingapi_results_alter().
  */
 function votingapi_bayesian_votingapi_results_alter(&$vote_results, $entity_type, $entity_id) {
-  $tag = array_keys($vote_results);
-  $tag = $tag[0];
+  if (!empty($vote_results)) {
+    $tag = array_keys($vote_results);
+    $tag = $tag[0];
 
-  $value_type = array_keys($vote_results[$tag]);
-  $value_type = $value_type[0];
+    $value_type = array_keys($vote_results[$tag]);
+    $value_type = $value_type[0];
 
-  $configuration = _votingapi_bayesian_configuration();
+    $configuration = _votingapi_bayesian_configuration();
 
-  if (isset($configuration['config'][$tag])) {
-    $config = $configuration['config'][$tag];
-    $config['tag'] = $tag;
-
-    $vote_results[$tag][$value_type]['bayesian'] = _votingapi_bayesian_compute($entity_type, $entity_id, $config);
-    _votingapi_bayesian_regenerate($entity_type, $config);
-
-  }
-
-  foreach((array) $configuration['config'] as $tag => $config) {
-    $config['tags'] = array_keys($configuration['config']);
-
-    if (in_array($tag, $config['tags'])) {
+    if (isset($configuration['config'][$tag])) {
+      $config = $configuration['config'][$tag];
       $config['tag'] = $tag;
+
+      $vote_results[$tag][$value_type]['bayesian'] = _votingapi_bayesian_compute($entity_type, $entity_id, $config);
+      _votingapi_bayesian_regenerate($entity_type, $config);
+
+    }
+
+    foreach((array) $configuration['config'] as $tag => $config) {
+      $config['tags'] = array_keys($configuration['config']);
+
+      if (in_array($tag, $config['tags'])) {
+        $config['tag'] = $tag;
+      }
     }
   }
 }

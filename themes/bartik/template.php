@@ -3,6 +3,7 @@
 /**
  * Add body classes if certain regions have content.
  */
+
 function bartik_preprocess_html(&$variables) {
   if (!empty($variables['page']['featured'])) {
     $variables['classes_array'][] = 'featured';
@@ -251,4 +252,13 @@ function bartik_preprocess_user_login(&$vars) {
 
   $vars['intro_text'] = t('Login please');
 
+}
+
+
+function bartik_preprocess_menu_local_task(&$variables) {
+    $link = &$variables['element']['#link'];
+    // check for $_GET['destination'] because drupal_get_destination() always contains at least the current page
+    if ($link['tab_root'] === 'user' && !empty($_GET['destination'])) {
+      $link['localized_options']['query'] = drupal_get_query_parameters();
+    }
 }
