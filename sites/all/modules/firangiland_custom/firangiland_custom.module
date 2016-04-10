@@ -9,6 +9,15 @@
 
 function firangiland_custom_init(){
 
+  drupal_add_js(drupal_get_path(
+    'module', 'firangiland_custom') .'/js/shorten.js',
+    array('type' => 'file', 'scope' => 'header'));
+
+  drupal_add_js(drupal_get_path(
+    'module', 'firangiland_custom') .'/js/fc_custom.js',
+    array('type' => 'file', 'scope' => 'header'));
+
+
   // $row = 1;
   // if (($handle = fopen(drupal_get_path('module', 'firangiland_custom') . "/includes/food_menu.csv", "r")) !== FALSE) {
 
@@ -107,6 +116,11 @@ function firangiland_custom_init(){
 
 }
 
+function fc_get_todays_day_name(){
+
+  $t=date('d-m-Y');
+  return date("D",strtotime($t));
+}
 
 
 /**
@@ -430,4 +444,14 @@ function firangiland_custom_user_login_submit($form, &$form_state) {
 //   $element['node_link']['destination']['#type'] = 'hidden';
 
 // }
+
+
+/**
+ *  Check the days for opening hours
+ */
+
+function firangiland_custom_check_if_open_today($day){
+
+
+}
 

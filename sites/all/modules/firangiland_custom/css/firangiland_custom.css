@@ -27,3 +27,29 @@
 
 	width: 170px;
 }
+
+
+
+.view-id-get_reviews_for_restaurant_block{
+	position: relative;
+}
+
+#restaurant-wrapper{
+    overflow:auto;
+}
+
+
+#col1{
+   float:left;
+   width: 48%;
+}
+
+
+#col2{
+    float:right;
+    width: 48%;
+}
+
+#opening-time-closed-today, #opening-time-closed{
+	color: red;
+}
