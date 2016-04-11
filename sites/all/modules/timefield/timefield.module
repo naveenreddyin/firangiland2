@@ -934,7 +934,7 @@ if ($variables['element']['#format'] == 'opening_time') {
         if($day == _timefield_get_todays_day_name()){
           if ($variables['element']['#time'][_timefield_get_todays_day_name()] == 1){
 
-            $output .= "Open today from ".$variables['element']['#time']['value_formatted']." till ".$variables['element']['#time']['value2_formatted']."</br>";
+            $output .= "<span id='opening-time-open-today'>Open today from ".$variables['element']['#time']['value_formatted']." till ".$variables['element']['#time']['value2_formatted']."</span></br>";
           }else{
 
             $output .= "<div id='opening-time-closed-today'>Closed today"."</div></br>";
