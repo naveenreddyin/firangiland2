@@ -116,11 +116,7 @@ function firangiland_custom_init(){
 
 }
 
-function fc_get_todays_day_name(){
 
-  $t=date('d-m-Y');
-  return date("D",strtotime($t));
-}
 
 
 /**
